@@ -1,8 +1,7 @@
-from embeddings import generate_embeddings, generate_response
 import utils.objectboxDB.ob as ob
-from faiss_search import search_embeddings
+from utils.functions.faiss_search import search_embeddings
 from typing import List, Dict, Tuple
-from embeddings import splitter
+from utils.functions.embeddings import splitter, generate_embeddings, generate_response
 
 
 def upload_text_file_to_objectbox(file_name: str = "", file_text: str = "",
