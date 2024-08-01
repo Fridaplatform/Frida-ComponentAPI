@@ -168,7 +168,4 @@ cython_debug/
 
 # Objectbox
 src/objectbox
-src/utils/objectbox-model.json
-objectbox/
-src/utils/functions/__pycache__/componentGeneration.cpython-312.pyc
-*.pyc
+src/utils/objectboxDB/objectbox-model.json
