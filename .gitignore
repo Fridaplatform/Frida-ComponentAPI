@@ -168,5 +168,4 @@ cython_debug/
 
 # Objectbox
 src/objectbox
-src/utils/objectbox-model.json
-objectbox/
+src/utils/objectboxDB/objectbox-model.json
