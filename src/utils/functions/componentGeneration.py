@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from dotenv import load_dotenv
 import os
 import re
-from typing import Optional, Dict, Any
+from typing import Optional
 from utils import schemas
 
 # Load environment variables from the .env file
@@ -21,15 +21,15 @@ client = AzureOpenAI(
 )
 
 def extract_filename(content: str) -> Optional[str]:
-    # Define a regex pattern to find filenames with a specific format in the comment
-    pattern = r'/\* File:\s+([\w\-]+\.js)\s*\*/'
+    # Define a regex pattern to find filenames with both comment styles
+    pattern = r'(?:/\* File:\s+|\s+// File:\s+)([\w\-]+\.js)'
     match = re.search(pattern, content)
     return match.group(1) if match else None
 
 def generateComponent(prompt: schemas.ComponentRequest) -> dict:
     promptManagement = f"""
     You are a code assistant specialized in generating React components. When you receive a {prompt.prompt} from the user, you should:
-    Generate the code for a React component based on the prompt.
+    Generate the code for a React component based on the prompt, and use Bootstrap to give it it's styles.
     Include documentation for the code, following best practices.
     Always include a comment on the first line specifying the file name the code should have.
     Enclose the entire code block between triple backticks (```), and ensure that this format is always used.
@@ -41,6 +41,8 @@ def generateComponent(prompt: schemas.ComponentRequest) -> dict:
     ```
     /* File: MyComponent.js */
     import React from 'react';
+    import 'bootstrap/dist/css/bootstrap.min.css';  // Import Bootstrap CSS
+
     /**
      * MyComponent - A simple React component.
      * 
@@ -48,8 +50,10 @@ def generateComponent(prompt: schemas.ComponentRequest) -> dict:
      */
     const MyComponent = () => {
         return (
-            <div>
-                Hello, World!
+            <div className="container mt-5">
+                <div className="alert alert-primary" role="alert">
+                    Hello, World!
+                </div>
             </div>
         );
     };
