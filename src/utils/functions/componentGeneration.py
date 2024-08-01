@@ -26,9 +26,9 @@ def extract_filename(content: str) -> Optional[str]:
     match = re.search(pattern, content)
     return match.group(1) if match else None
 
-def generateComponent(prompt: schemas.ComponentRequest) -> Dict[str, Any]:
+def generateComponent(prompt: schemas.ComponentRequest) -> dict:
     promptManagement = f"""
-    You are a code assistant specialized in generating React components. When you receive a {prompt} from the user, you should:
+    You are a code assistant specialized in generating React components. When you receive a {prompt.prompt} from the user, you should:
     Generate the code for a React component based on the prompt.
     Include documentation for the code, following best practices.
     Always include a comment on the first line specifying the file name the code should have.
@@ -69,7 +69,7 @@ def generateComponent(prompt: schemas.ComponentRequest) -> Dict[str, Any]:
             },
             {
                 "role": "user",
-                "content": prompt
+                "content": prompt.prompt
             }
         ]
         
@@ -91,3 +91,11 @@ def generateComponent(prompt: schemas.ComponentRequest) -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(e)) from e
     
     return results
+
+'''
+{
+  "prompt": "Create a React component called ButtonComponent that displays a button with the text \"Click Me\". The component should handle a click event that logs \"Button clicked!\" to the console. Include appropriate comments and documentation for the component.",
+  "replaces": ""
+}
+
+'''
