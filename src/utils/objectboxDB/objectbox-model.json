@@ -1,0 +1,60 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "modelVersionParserMinimum": 5,
+  "entities": [
+    {
+      "id": "1:1533677535634000575",
+      "name": "TextChunk",
+      "lastPropertyId": "8:554664184466849149",
+      "properties": [
+        {
+          "id": "1:1242563708810444291",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2862465029876440417",
+          "name": "repository_name",
+          "type": 9
+        },
+        {
+          "id": "3:2507664998069744367",
+          "name": "repository_branch",
+          "type": 9
+        },
+        {
+          "id": "4:1581533608753205423",
+          "name": "file_name",
+          "type": 9
+        },
+        {
+          "id": "5:6492341241214310697",
+          "name": "context",
+          "type": 9
+        },
+        {
+          "id": "6:5620393855036630017",
+          "name": "text",
+          "type": 9
+        },
+        {
+          "id": "7:8944574432169888750",
+          "name": "path",
+          "type": 9
+        },
+        {
+          "id": "8:554664184466849149",
+          "name": "embedding",
+          "type": 28,
+          "flags": 8,
+          "indexId": "1:7367872267094420385"
+        }
+      ]
+    }
+  ],
+  "lastEntityId": "1:1533677535634000575",
+  "lastIndexId": "1:7367872267094420385"
+}
