@@ -48,7 +48,7 @@ def generateComponent(prompt: schemas.ComponentRequest) -> dict:
      * 
      * @returns {JSX.Element} The rendered component.
      */
-    const MyComponent = () => {
+    export const MyComponent = () => {
         return (
             <div className="container mt-5">
                 <div className="alert alert-primary" role="alert">
@@ -57,7 +57,6 @@ def generateComponent(prompt: schemas.ComponentRequest) -> dict:
             </div>
         );
     };
-    export default MyComponent;
     ```
     """
     
