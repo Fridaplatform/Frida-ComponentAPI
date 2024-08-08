@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from utils.functions import componentGeneration, github_repo_file_decoder, object_box
+from utils.functions import componentGeneration, github_repo_file_decoder, object_box, unitTests
 from utils import schemas
 
 router = APIRouter()
@@ -20,6 +20,24 @@ def generate_component(request: schemas.ComponentRequest):
     try:
         component = componentGeneration.generateComponent(request)
         return{'component': component}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=e) from e
+    
+
+@router.post('/unitTest', description= 'Generate unit tests for the provided code')
+def generate_tests(request: schemas.CodeRequest):
+    """
+    Generate unit tests for the provided code.
+
+    Args:
+        request (CodeRequest): The code for which to generate unit tests.
+
+    Returns:
+        dict: Generated unit tests.
+    """
+    try:
+        tests = unitTests.generate_unit_test(request) #Generates a unit test for the given request. :param request: the request to generate a unit test for :return: the generated unit test
+        return {'tests': tests} #Returns a dictionary containing a single key-value pair. The key is 'tests' and the value is the provided list 'tests'.
     except Exception as e:
         raise HTTPException(status_code=500, detail=e) from e
 

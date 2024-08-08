@@ -1,23 +1,14 @@
-from openai import AzureOpenAI
+from openai import OpenAI
 from fastapi import HTTPException
-from dotenv import load_dotenv
-import os
+
 import re
 from typing import Optional
 from utils import schemas
 
-# Load environment variables from the .env file
-load_dotenv()
-OpenAi_Key = os.getenv("OPENAI_API_KEY")
-OpenAi_Model = os.getenv("OPENAI_CHAT_MODEL_NAME")
-OpenAi_Azure_endPoint = os.getenv("OPENAI_API_BASE")
-OpenAi_ApiVersion = os.getenv("OPENAI_API_VERSION")
-
 # Create a new instance of the AzureOpenAI client
-client = AzureOpenAI(
-    azure_endpoint=OpenAi_Azure_endPoint,
-    api_key=OpenAi_Key,
-    api_version=OpenAi_ApiVersion
+client = OpenAI(
+    base_url="http://198.145.126.112:8080/v1",
+    api_key="-"
 )
 
 def extract_filename(content: str) -> Optional[str]:
@@ -59,16 +50,14 @@ def generateComponent(prompt: schemas.ComponentRequest) -> dict:
     };
     ```
     """
+
+    general_prompt = promptManagement + "\n" + codeExample
     
     try:
         messages = [
             {
                 "role": "system",
-                "content": promptManagement,
-            },
-            {
-                "role": "system",
-                "content": codeExample,
+                "content": general_prompt,
             },
             {
                 "role": "user",
@@ -76,12 +65,15 @@ def generateComponent(prompt: schemas.ComponentRequest) -> dict:
             }
         ]
         
-        completion = client.chat.completions.create(
-            model=OpenAi_Model,
-            messages=messages
-        )
+        chat_completion = client.chat.completions.create(
+            model="tgi",
+            messages=messages,
+            stream=False,
+            temperature=1,
+            max_tokens=200
+            )
         
-        componentCode = completion.choices[0].message.content
+        componentCode = chat_completion.choices[0].message.content
         file_name = extract_filename(componentCode)
         print('file:', file_name)
         print('code', componentCode)
