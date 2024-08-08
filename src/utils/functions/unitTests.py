@@ -58,7 +58,7 @@ def generate_unit_test(code: schemas.CodeRequest) -> dict:
         else:
             languagePrompt = f"Generate unit tests for the function {code.snippet}  with the following criteria:  Test all edge cases: This includes testing negative inputs, zero, and maximum allowed values. Ensure type error handling: Verify that the function handles incorrect data types appropriately (e.g., strings instead of numbers)."
 
-        prompt2 = f" the tests should be written in the {code.language} programming language as specified by the user. It is important to always include the function to test in your answer, neither you nor the user should import the function to test, it should always be in your generated answer. {code.snippet} should be present in the generated code in order to be tested."
+        prompt2 = f" The tests should be written in the {code.language} programming language as specified by the user. It is essential to include the function to test directly in your answer—neither you nor the user should import the function. The {code.snippet} must be present in the generated code for testing. Ensure that {code.snippet} is fully included in the generated code, as it is critical that neither the AI nor the user imports this function."
         
         prompt3 = ""
         if code.framework != "":
@@ -75,9 +75,9 @@ def generate_unit_test(code: schemas.CodeRequest) -> dict:
         if code.testExample != "":
             prompt5 = f"Use {code.testExample} as an example of how to generate a up to guidelines test. Using it as a template to generate different tests."
             
-        prompt6 = "The test you will return need to have two types of tests happy paths and edge cases. You will separte the happy path test from the edge cases, and have to specify which is which. You have to specigy it by adding the comment 'Happy Paths' or 'Edge Cases' on top of them (only one time on top of the first type of test for happy path and edge case). Include the filename for the generated tests as a comment on the very first line of the code, before anything else. Only respond with the generated code within a code-block, denoted by ```, and always include the programming language (specified by the user) used at the beginning of the code-block. Always document your code and make sure to follow best practices. You should also include comments with the filename that the file should have, and instructions on how to run it. These instructions should always be included in the form of comments always at the beginning of the code, and should detail the modules or libraries that need to be installed, how to install them, and the necessary commands to run the file. Do not explain your reasoning, simply answer with the generated code. Only include your code with the generated test (with it's necessary comments), and the commented instrucctions at the beggining of the code, nothing more. Do not explain your reasoning or tests, just answer with the code and it's instructions."
+        prompt6 = "The test you return must include two types of tests: happy paths and edge cases. You must generate at least six tests in total, with three happy paths and three edge cases. Separate the happy path tests from the edge cases, specifying which is which by adding the comment 'Happy Paths' or 'Edge Cases' on top of them (only one time on top of the first test type for each). Include the filename for the generated tests as a comment on the very first line of the code. Respond only with the generated code within a code-block, denoted by ```, and always include the programming language (specified by the user) at the beginning of the code-block. Ensure to document your code, follow best practices, and include comments with the filename and instructions on how to run it. These instructions should always be included as comments at the beginning of the code, detailing the modules or libraries that need to be installed, how to install them, and the necessary commands to run the file. Only respond with the code and its comments—no explanations."
 
-        finalPrompt = languagePrompt + "\n" + prompt2 + "\n" + prompt3 + "\n" + prompt4 + "\n" + prompt5 + "\n" + prompt6
+        finalPrompt = languagePrompt + "\n" + prompt2 + "\n" + prompt3 + "\n" + prompt4 + "\n" + prompt5 + "\n" + prompt6 + "\n" + "Do not add any aditional text, only responde with the generated code, it's insctruction, and necessary comments. After finishing the code block with ``` do not add anything more, you should end your answer with ```"
 
         prompts = [
             {
@@ -96,7 +96,7 @@ def generate_unit_test(code: schemas.CodeRequest) -> dict:
             messages=prompts,
             stream=False,
             temperature=0.00000001,
-            max_tokens=200
+            max_tokens=1024
         )
         test_code = completion.choices[0].message.content
         separated_tests =  separate_tests(test_code)
@@ -108,7 +108,7 @@ def generate_unit_test(code: schemas.CodeRequest) -> dict:
         }
         
         print(file_name)
-        print('code' + test_code)
+        print('code \n' + test_code)
         
     except Exception as e: #Raises an HTTPException with status code 500 and detailed error message, propagating the original exception as the cause.
         raise HTTPException(status_code=500, detail=e) from e

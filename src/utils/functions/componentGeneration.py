@@ -70,7 +70,7 @@ def generateComponent(prompt: schemas.ComponentRequest) -> dict:
             messages=messages,
             stream=False,
             temperature=1,
-            max_tokens=200
+            max_tokens=1024
             )
         
         componentCode = chat_completion.choices[0].message.content
